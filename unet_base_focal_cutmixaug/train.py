@@ -35,12 +35,12 @@ def parse_args():
     parser = argparse.ArgumentParser()
     
     parser.add_argument("--resume", type=bool, default=False)
-    parser.add_argument("--load_from", type=bool, default=True)
+    parser.add_argument("--load_from", type=bool, default=False)
     parser.add_argument("--run_id", type=str)
     parser.add_argument("--exp_name", type=str)
     parser.add_argument("--seed", type=int,default=21)
 
-    parser.add_argument("--fold", type=int, default=4)
+    parser.add_argument("--fold", type=int, default=0)
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--loss", type=str, default='focal_dice_loss')     ## default bce loss
     
@@ -59,7 +59,7 @@ def parse_args():
 args = parse_args()
 
 ############## TRAINING SETTINGS 1 ########################
-MODEL = 'unet_base_2048_fold4_Woo_AUX'                    ## exp_name
+MODEL = 'unet_base_2048_fold0'                    ## exp_name
 NAME = MODEL
 LOAD_FROM = args.load_from
 BATCH_SIZE = args.batch_size
@@ -368,7 +368,7 @@ def aux_train(model, data_loader, val_loader, seg_criterion, aux_criterion, opti
     
 ############## TRAINING SETTINGS 2######################
 # Model
-model = Aux_UNet()
+model = unet_base(is_grey = GREY, use_nlb= NLB, batch_size= BATCH_SIZE)
 
 if LOAD_FROM:
     LOAD_MODEL = 'unet_base_2048_fold4_Woo_focal_Aug'
@@ -391,7 +391,7 @@ if AUX:
     aux_criterion = nn.MSELoss()
     aux_train(model, train_loader, valid_loader, CRITERION, aux_criterion, optimizer, scheduler, AUX)
 else:
-    train(model, train_loader, valid_loader, CRITERION, optimizer, scheduler)
+    train(model, train_loader, valid_loader, CRITERION, optimizer, scheduler, AUX)
 
 if __name__ == '__main__':
     args = parse_args()

@@ -1,6 +1,6 @@
 import sys
-sys.path.append('/opt/ml/input/SMP')
-import segmentation_models_pytorch as sm
+# sys.path.append('/opt/ml/input/SMP')
+import segmentation_models_pytorch as smp
 
 ## Reference : https://github.com/tea1528/Non-Local-NN-Pytorch/blob/master/models/resnet2D.py
 ## Non Local block implementation
@@ -215,7 +215,7 @@ class Aux_UNet(torch.nn.Module):
     def __init__(self,encoder_name= 'efficientnet-b0', meta_feat_num=3):
         super().__init__()
         
-        self.model = sm.create_model(
+        self.model = smp.create_model(
             arch= 'UNet',
             encoder_name = encoder_name,
             encoder_weights = "imagenet",
